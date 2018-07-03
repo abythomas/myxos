@@ -1,0 +1,67 @@
+load (7,1);  // excetion handler
+load (8,2);
+load (23,17);  //int7
+load (24,18);
+
+[READY_LIST+0]=0; //pid of init
+
+load(25,21);   // init
+load(26,22);
+load(27,23);
+
+PTBR=1024;   
+PTLR=4;      
+
+[PTBR+0]=25;  
+[PTBR+1]="01";
+[PTBR+2]=26;
+[PTBR+3]="01";
+[PTBR+4]=27;
+[PTBR+5]="01";
+[PTBR+6]=28;
+[PTBR+7]="01";
+
+[READY_LIST+1]=2;  
+SP=3*512;         
+
+[28*512]=0;     //logical 0 on top of stack
+           
+
+load (5,19);   // FAT
+load (6,20);    // DFL
+load (11,5);   // int1
+load (12,6);
+load(9,3);     // timer
+load(10,4);
+
+//System wide
+
+alias counter S0;
+counter=0;
+while (counter <128 ) do
+ [FILE_TABLE +counter+0]=-1; //FAT index
+ [FILE_TABLE +counter+1]=0;   // file open count
+ counter=counter+2;
+endwhile;
+
+// Per process page table
+
+alias updater S1;
+updater=15;
+
+while (updater<31) do
+ [READY_LIST+updater+0]=-1;
+ [READY_LIST+updater+1]=-1;
+ updater=updater+2;
+endwhile;
+
+load(13,7);    //int2
+load(14,8);
+
+load(15,9);    //int3
+load(16,10);
+
+load(17,11);   //int4
+load(18,12);
+
+ireturn ;

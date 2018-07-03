@@ -1,0 +1,26 @@
+load(7,1); //load exception handlers
+load(8,2);
+load(23,17);
+load(24,18);
+[READY_LIST+0]=0; //set pid of init to zero in PCB
+load(25,21); //load init code to user code space of memory
+load(26,22);
+load(27,23);
+PTBR=1024;
+PTLR=4;
+[PTBR+0]=25; //making page table entires for init code
+[PTBR+1]="01"; //01 means unreferenced and valid
+[PTBR+2]=26;
+[PTBR+3]="01";
+[PTBR+4]=27;
+[PTBR+5]="01";
+[PTBR+6]=28; //stack area for init code
+[PTBR+7]="01";
+[READY_LIST+1]=2; //set state of init process as running
+SP=3*512; //SP is set as staring logical add of stack area
+[28*512]=0; //put 0 on top of stack so that IP value is set 0
+load (11, 5);
+load (12, 6);
+load (9, 3);
+load (10, 4);
+ireturn;
